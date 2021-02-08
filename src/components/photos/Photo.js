@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from "react";
 import axios from "axios";
-import selectArticle from "../../redux/actions/articles/selectArticle";
+import selectPhoto from "../../redux/actions/photos/selectPhoto";
 import { useDispatch } from "react-redux";
 import "./style.css";
-import delArticle from "../../redux/actions/articles/delArticle";
+import delPhoto from "../../redux/actions/photos/delPhoto";
 import { Button, Modal } from "react-bootstrap";
-import editArticle from "../../redux/actions/articles/editArticle";
+import editPhoto from "../../redux/actions/photos/editPhoto";
 
-const Article = ({ article, smallCard }) => {
+const Photo = ({ photo, smallCard }) => {
   const [showDetailModal, setShowDetailModal] = useState(false);
 
   const [showEditModal, setShowEditModal] = useState(false);
@@ -31,67 +31,66 @@ const Article = ({ article, smallCard }) => {
     return style > 3 ? setStyle(1) : setStyle(style + 1);
   }, [style]);
 
-  const handleArticleDetail = useCallback(() => {
+  const handlePhotoDetail = useCallback(() => {
     axios
-      .get(`https://jsonplaceholder.typicode.com/posts/${article.id}`)
+      .get(`https://jsonplaceholder.typicode.com/photos/${photo.id}`)
       .then((response) => {
         console.log(response.data);
-        dispatch(selectArticle(response.data));
+        dispatch(selectPhoto(response.data));
       });
     handleShow();
-  }, [article.id, dispatch]);
+  }, [photo.id, dispatch]);
 
-  const handleDeleteArticle = (id) => {
-    dispatch(delArticle(id));
+  const handleDeletePhoto = (id) => {
+    dispatch(delPhoto(id));
     setShowDelModal(false);
   };
 
-  const [articleTitle, setArticleTitle] = useState(article.title)
+  const [photoTitle, setPhotoTitle] = useState(photo.title);
 
-  const [articleBody, setArticleBody] = useState(article.body)
+  const [photoUrl, setPhotoBody] = useState(photo.url);
 
-  const handleInputArticleTitleEdit = useCallback((value) => {
-    setArticleTitle(value);
+  const handleInputPhotoTitleEdit = useCallback((value) => {
+    setPhotoTitle(value);
   }, []);
 
-  const handleInputArticleBodyEdit = useCallback((value) => {
-    setArticleBody(value);
+  const handleInputPhotoBodyEdit = useCallback((value) => {
+    setPhotoBody(value);
   }, []);
 
-  
-
-  const handleEditArticle = useCallback(article => {
-    let editedArticle = {
-      ...article, title: articleTitle, body: articleBody 
-    }
-    dispatch(editArticle(editedArticle))
-    setShowEditModal(false)
-    console.log(editedArticle);
-  }, [articleBody, articleTitle, dispatch])
+  const handleEditPhoto = useCallback(
+    (photo) => {
+      let editedPhoto = {
+        ...photo,
+        title: photoTitle,
+        url: photoUrl,
+      };
+      dispatch(editPhoto(editedPhoto));
+      setShowEditModal(false);
+      console.log(editedPhoto);
+    },
+    [photoUrl, photoTitle, dispatch]
+  );
 
   return (
     <div className={`col-sm-12 mt-3 ${smallCard ? "col-md-4" : "col-md-6"}`}>
       <div className="card">
         <div className={`card-body style_${style}`}>
-          <h5 className="card-title">
-            {article.title.length > 20
-              ? article.title.substr(0, 20) + "..."
-              : article.title}
+          <img className="card-img-top" src={photo.url} alt="" />
+          <h5 className="card-title mt-2">
+            {photo.title.length > 20
+              ? photo.title.substr(0, 20) + "..."
+              : photo.title}
           </h5>
-          <p className="card-text">
-            {article.body.length > 100
-              ? article.body.substr(0, 100) + "..."
-              : article.body}
-          </p>
           <div className="btn-group d-flex justify-content-center">
             <button
-              onClick={() => handleArticleDetail(article.id)}
+              onClick={() => handlePhotoDetail(photo.id)}
               className="btn btn-outline-primary"
             >
               View
             </button>
             <button
-              onClick={() => handleEditModalShow(article.id)}
+              onClick={() => handleEditModalShow(photo.id)}
               className="btn btn-outline-primary"
             >
               Edit
@@ -117,10 +116,7 @@ const Article = ({ article, smallCard }) => {
         </Modal.Header>
         <Modal.Body>Do you really want to delete this card?</Modal.Body>
         <Modal.Footer>
-          <Button
-            variant="danger"
-            onClick={() => handleDeleteArticle(article.id)}
-          >
+          <Button variant="danger" onClick={() => handleDeletePhoto(photo.id)}>
             Yes
           </Button>
           <Button variant="success" onClick={() => setShowDelModal(false)}>
@@ -130,48 +126,45 @@ const Article = ({ article, smallCard }) => {
       </Modal>
       <Modal show={showDetailModal} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Article Info</Modal.Title>
+          <Modal.Title>Photo Info</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4>{article.title}</h4>
-          {article.body}
+          <h4>{photo.title}</h4>
+          <img className="card-img-top" src={photo.url} alt=""/>
         </Modal.Body>
       </Modal>
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit article</Modal.Title>
+          <Modal.Title>Edit photo</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="mb-3">
             <label htmlFor="exampleFormControlInput1" className="form-label">
-              Article Title
+              Photo Title
             </label>
             <input
               type="text"
               className="form-control"
               id="exampleFormControlInput1"
-              onChange={(e) => handleInputArticleTitleEdit(e.target.value)}
-              value={articleTitle}
+              onChange={(e) => handleInputPhotoTitleEdit(e.target.value)}
+              value={photoTitle}
             />
           </div>
           <div className="mb-3">
             <label htmlFor="exampleFormControlTextarea1" className="form-label">
-              Article Body
+              Photo Url
             </label>
-            <textarea
+            <input
               className="form-control"
               id="exampleFormControlTextarea1"
               rows="3"
-              onChange={(e) => handleInputArticleBodyEdit(e.target.value)}
-              value={articleBody}
-            ></textarea>
+              onChange={(e) => handleInputPhotoBodyEdit(e.target.value)}
+              value={photoUrl}
+            />
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button 
-            variant="success"
-            onClick={() => handleEditArticle(article)}
-          >
+          <Button variant="success" onClick={() => handleEditPhoto(photo)}>
             Confirm
           </Button>
         </Modal.Footer>
@@ -180,4 +173,4 @@ const Article = ({ article, smallCard }) => {
   );
 };
 
-export default Article;
+export default Photo;

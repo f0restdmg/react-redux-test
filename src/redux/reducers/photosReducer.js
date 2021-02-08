@@ -1,22 +1,22 @@
-const articles = (state = [], action) => {
+const photos = (state = [], action) => {
   switch (action.type) {
-    case "SET_ARTICLES":
+    case "SET_PHOTOS":
       return [...state, ...action.payload];
-    case "ADD_ARTICLE":
+    case "ADD_PHOTO":
       return [...state, action.payload];
-    case "EDIT_ARTICLE": 
+    case "EDIT_PHOTO": 
       return state.map(item => {
        if (item.id === action.payload.id) {
          item.title = action.payload.title;
-         item.body = action.payload.body
+         item.url = action.payload.url;
        } 
        return item;
       })
-    case "DELETE_ARTICLE":
+    case "DELETE_PHOTO":
       return state.filter((item) => item.id !== action.id);
     default:
       return state;
   }
 };
 
-export default articles;
+export default photos;

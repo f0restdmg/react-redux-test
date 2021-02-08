@@ -1,44 +1,44 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import getArticles from "../../redux/actions/articles/getArticles";
-import Article from "./Article";
+import getPhotos from "../../redux/actions/photos/getPhotos";
+import Photo from "./Photo";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
-import addArticle from "../../redux/actions/articles/addArticle";
+import addPhoto from "../../redux/actions/photos/addPhoto";
 
-const ArticleList = () => {
+const PhotoList = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const apiUrl = "https://jsonplaceholder.typicode.com/posts";
+    const apiUrl = "https://jsonplaceholder.typicode.com/photos";
     axios.get(apiUrl).then((response) => {
-      dispatch(getArticles(response.data));
+      dispatch(getPhotos(response.data));
     });
   }, [dispatch]);
 
-  const articles = useSelector((state) => state.articles);
+  const photos = useSelector((state) => state.photos);
 
-  const [articlesCount, setArticlesCount] = useState(3);
+  const [photosCount, setPhotosCount] = useState(3);
 
-  const [newArticle, setNewArticle] = useState({});
+  const [newPhoto, setNewPhoto] = useState({});
 
-  const handleInputArticleTitle = useCallback((value) => {
-    setNewArticle({
-      ...newArticle, id: articles.length + 1, title: value 
+  const handleInputPhotoTitle = useCallback((value) => {
+    setNewPhoto({
+      ...newPhoto, id: photos.length + 1, title: value 
     })
-  }, [articles.length, newArticle])
+  }, [photos.length, newPhoto])
 
-  const handleInputArticleBody = useCallback((value) => {
-    setNewArticle({
-      ...newArticle, body: value
+  const handleInputPhotoUrl = useCallback((value) => {
+    setNewPhoto({
+      ...newPhoto, url: value
     })
-  }, [newArticle])
+  }, [newPhoto])
 
-  const handleAddArticle = useCallback(() => {
-    dispatch(addArticle(newArticle))
+  const handleAddPhoto = useCallback(() => {
+    dispatch(addPhoto(newPhoto))
     setShowCreateModal(false)
-  }, [dispatch, newArticle])
+  }, [dispatch, newPhoto])
 
   const [smallCard, setSmallCard] = useState(true);
 
@@ -46,33 +46,33 @@ const ArticleList = () => {
 
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  let newArticles = [];
+  let newPhotos = [];
 
   let counter = 1;
 
-  for (let newArticle of articles) {
-    if (counter > articlesCount) break;
-    newArticles.push(newArticle);
+  for (let newPhoto of photos) {
+    if (counter > photosCount) break;
+    newPhotos.push(newPhoto);
     counter++;
   }
 
   const handleShowMore = useCallback(() => {
-    let lastCount = articlesCount + 3;
-    if (lastCount > articles.length) {
-      setArticlesCount(articles.length);
+    let lastCount = photosCount + 3;
+    if (lastCount > photos.length) {
+      setPhotosCount(photos.length);
       setShowMoreButton(false);
     } else {
-      setArticlesCount(articlesCount + 3);
+      setPhotosCount(photosCount + 3);
     }
-  }, [articles.length, articlesCount]);
+  }, [photos.length, photosCount]);
 
   return (
     <>
       <div className="container pt-5 pb-5">
         <div className="row">
           <div className="col d-flex">
-            <h2>Articles List</h2>
-            <button onClick={() => setShowCreateModal(true)} className="btn btn-primary ml-3">Add new article</button>
+            <h2>Photos List</h2>
+            <button onClick={() => setShowCreateModal(true)} className="btn btn-primary ml-3">Add new photo</button>
           </div>
           <div className="col">
             <div className="float-right">
@@ -86,11 +86,11 @@ const ArticleList = () => {
           </div>
         </div>
         <div className="row">
-          {newArticles.length > 0 &&
-            newArticles.map((article) => (
-              <Article
-                key={article.id}
-                article={article}
+          {newPhotos.length > 0 &&
+            newPhotos.map((photo) => (
+              <Photo
+                key={photo.id}
+                photo={photo}
                 smallCard={smallCard}
               />
             ))}
@@ -111,36 +111,37 @@ const ArticleList = () => {
         )}
       </div>
       
+      
       <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Add new article</Modal.Title>
+          <Modal.Title>Add photo</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="mb-3">
             <label htmlFor="exampleFormControlInput1" className="form-label">
-              Article Title
+              Title
             </label>
             <input
               type="text"
               className="form-control"
               id="exampleFormControlInput1"
-              onChange={(e) => handleInputArticleTitle(e.target.value)}
+              onChange={(e) => handleInputPhotoTitle(e.target.value)}
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="exampleFormControlTextarea1" className="form-label">
-              Article Body
+            <label htmlFor="exampleFormControlInput1" className="form-label">
+              Img url
             </label>
-            <textarea
+            <input
+              type="text"
               className="form-control"
-              id="exampleFormControlTextarea1"
-              rows="3"
-              onChange={(e) => handleInputArticleBody(e.target.value)}
-            ></textarea>
+              id="exampleFormControlInput1"
+              onChange={(e) => handleInputPhotoUrl(e.target.value)}
+            />
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="success" onClick={handleAddArticle}>
+          <Button variant="success" onClick={handleAddPhoto}>
             Create
           </Button>
         </Modal.Footer>
@@ -149,4 +150,4 @@ const ArticleList = () => {
   );
 };
 
-export default ArticleList;
+export default PhotoList;
