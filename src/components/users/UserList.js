@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import getUsers from "../../redux/actions/users/getUsers";
+import { getUsers, addUser } from "../../redux/modules/users/action-creators";
 import User from "./User";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
-import addUser from "../../redux/actions/users/addUser";
 
 const UserList = () => {
   const dispatch = useDispatch();

@@ -1,13 +1,14 @@
 import React from 'react';
 import ArticleList from '../components/articles/ArticleList';
-import Header from '../components/Header';
+import MainWrapper from '../containers/MainWrapper';
 
 const Articles = () => {
   return (
-    <div>
-      <Header />
-      <ArticleList />
-    </div>
+    <>
+      <MainWrapper>
+        <ArticleList />
+      </MainWrapper> 
+    </>
   );
 }
 

@@ -1,14 +1,15 @@
-import React from 'react';
-import PhotoList from '../components/photos/PhotoList';
-import Header from '../components/Header';
+import React from "react";
+import PhotoList from "../components/photos/PhotoList";
+import MainWrapper from "../containers/MainWrapper";
 
 const Photos = () => {
   return (
-    <div>
-      <Header />
-      <PhotoList />
-    </div>
+    <>
+      <MainWrapper>
+        <PhotoList />
+      </MainWrapper>
+    </>
   );
-}
+};
 
 export default Photos;

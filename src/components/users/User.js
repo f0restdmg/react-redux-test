@@ -1,11 +1,7 @@
 import React, { useCallback, useState } from "react";
-import axios from "axios";
-import selectUser from "../../redux/actions/users/selectUser";
 import { useDispatch } from "react-redux";
-import "./style.css";
-import delUser from "../../redux/actions/users/delUser";
+import { delUser, editUser } from "../../redux/modules/users/action-creators";
 import { Button, Modal } from "react-bootstrap";
-import editUser from "../../redux/actions/users/editUser";
 
 const User = ({ user, smallCard }) => {
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -32,14 +28,8 @@ const User = ({ user, smallCard }) => {
   }, [style]);
 
   const handleUserDetail = useCallback(() => {
-    axios
-      .get(`https://jsonplaceholder.typicode.com/users/${user.id}`)
-      .then((response) => {
-        console.log(response.data);
-        dispatch(selectUser(response.data));
-      });
     handleShow();
-  }, [user.id, dispatch]);
+  }, []);
 
   const handleDeleteUser = (id) => {
     dispatch(delUser(id));

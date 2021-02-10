@@ -1,11 +1,7 @@
 import React, { useCallback, useState } from "react";
-import axios from "axios";
-import selectPhoto from "../../redux/actions/photos/selectPhoto";
 import { useDispatch } from "react-redux";
-import "./style.css";
-import delPhoto from "../../redux/actions/photos/delPhoto";
+import { delPhoto, editPhoto } from "../../redux/modules/photos/action-creators";
 import { Button, Modal } from "react-bootstrap";
-import editPhoto from "../../redux/actions/photos/editPhoto";
 
 const Photo = ({ photo, smallCard }) => {
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -32,14 +28,8 @@ const Photo = ({ photo, smallCard }) => {
   }, [style]);
 
   const handlePhotoDetail = useCallback(() => {
-    axios
-      .get(`https://jsonplaceholder.typicode.com/photos/${photo.id}`)
-      .then((response) => {
-        console.log(response.data);
-        dispatch(selectPhoto(response.data));
-      });
     handleShow();
-  }, [photo.id, dispatch]);
+  }, []);
 
   const handleDeletePhoto = (id) => {
     dispatch(delPhoto(id));
@@ -67,7 +57,6 @@ const Photo = ({ photo, smallCard }) => {
       };
       dispatch(editPhoto(editedPhoto));
       setShowEditModal(false);
-      console.log(editedPhoto);
     },
     [photoUrl, photoTitle, dispatch]
   );

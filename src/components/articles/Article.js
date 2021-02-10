@@ -1,11 +1,7 @@
 import React, { useCallback, useState } from "react";
-import axios from "axios";
-import selectArticle from "../../redux/actions/articles/selectArticle";
 import { useDispatch } from "react-redux";
-import "./style.css";
-import delArticle from "../../redux/actions/articles/delArticle";
+import { delArticle, editArticle } from "../../redux/modules/articles/action-creators";
 import { Button, Modal } from "react-bootstrap";
-import editArticle from "../../redux/actions/articles/editArticle";
 
 const Article = ({ article, smallCard }) => {
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -32,14 +28,8 @@ const Article = ({ article, smallCard }) => {
   }, [style]);
 
   const handleArticleDetail = useCallback(() => {
-    axios
-      .get(`https://jsonplaceholder.typicode.com/posts/${article.id}`)
-      .then((response) => {
-        console.log(response.data);
-        dispatch(selectArticle(response.data));
-      });
     handleShow();
-  }, [article.id, dispatch]);
+  }, []);
 
   const handleDeleteArticle = (id) => {
     dispatch(delArticle(id));
@@ -58,15 +48,12 @@ const Article = ({ article, smallCard }) => {
     setArticleBody(value);
   }, []);
 
-  
-
   const handleEditArticle = useCallback(article => {
     let editedArticle = {
       ...article, title: articleTitle, body: articleBody 
     }
     dispatch(editArticle(editedArticle))
     setShowEditModal(false)
-    console.log(editedArticle);
   }, [articleBody, articleTitle, dispatch])
 
   return (

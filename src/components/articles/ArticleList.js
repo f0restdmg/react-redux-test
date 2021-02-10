@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import getArticles from "../../redux/actions/articles/getArticles";
+import { getArticles, addArticle }  from "../../redux/modules/articles/action-creators";
 import Article from "./Article";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
-import addArticle from "../../redux/actions/articles/addArticle";
 
 const ArticleList = () => {
   const dispatch = useDispatch();

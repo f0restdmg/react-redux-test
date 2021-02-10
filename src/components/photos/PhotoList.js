@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import getPhotos from "../../redux/actions/photos/getPhotos";
+import { getPhotos, addPhoto } from "../../redux/modules/photos/action-creators";
 import Photo from "./Photo";
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
-import addPhoto from "../../redux/actions/photos/addPhoto";
 
 const PhotoList = () => {
   const dispatch = useDispatch();
